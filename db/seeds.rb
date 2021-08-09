@@ -1,0 +1,1 @@
+Goal.create(title: 'Organizar o escritório', description: '', deadline: 2.weeks.from_now)
