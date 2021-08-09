@@ -1,11 +1,12 @@
 require 'rails_helper'
 
-describe 'TasksController', type: :request do
+describe 'GoalsController', type: :request do
   context 'index' do
     it 'should return status ok' do
-      get api_tasks_path
+      get api_goals_path
 
       expect(response).to have_http_status(200)
+      expect(response.body).to include 'Hello World'
     end
   end
 end

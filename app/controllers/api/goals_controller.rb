@@ -1,6 +1,6 @@
 class Api::GoalsController < Api::ApiController 
   def index
-    render json: {}, status: 200
+    render json: {msg: 'Hello World'}, status: 200
   end
 
   def new; end
