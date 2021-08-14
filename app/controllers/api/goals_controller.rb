@@ -3,6 +3,13 @@ class Api::GoalsController < Api::ApiController
     render json: { msg: 'Hello World' }, status: :ok
   end
 
+  def show
+    @goal = Goal.find(params[:id])
+    render json: { goal: @goal.as_json,
+                   milestones: @goal.milestones,
+                   steps: @goal.steps }
+  end
+
   def new
     @goal = Goal.new(
       title: [:title],

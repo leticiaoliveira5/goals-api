@@ -10,6 +10,17 @@ describe 'GoalsController', type: :request do
     end
   end
 
+  describe 'show' do
+    it 'returns goal, its milestones and steps if present' do
+      goal = create(:goal_with_milestones)
+      get api_goal_path(goal)
+
+      expect(JSON.parse(response.body)).to have_key('goal')
+      expect(JSON.parse(response.body)).to have_key('milestones')
+      expect(JSON.parse(response.body)).to have_key('steps')
+    end
+  end
+
   describe 'create' do
     context 'success' do
       it 'should return status created and goal' do
@@ -37,7 +48,7 @@ describe 'GoalsController', type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.body).to include 'Record deleted'
-      expect(Goal.count).to eq 0
+      expect(Goal.where(id: goal.id)).to be_empty
     end
   end
 
