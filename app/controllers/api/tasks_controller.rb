@@ -1,5 +1,5 @@
-class Api::TasksController < Api::ApiController 
+class Api::TasksController < Api::ApiController
   def index
-    render json: {}, status: 200
+    render json: {}, status: :ok
   end
 end
