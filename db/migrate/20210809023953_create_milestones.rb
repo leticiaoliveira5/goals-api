@@ -5,6 +5,7 @@ class CreateMilestones < ActiveRecord::Migration[6.1]
       t.timestamps
       t.string :title
       t.string :description
+      t.integer :goal_id
     end
   end
 end

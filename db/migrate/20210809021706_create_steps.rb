@@ -5,6 +5,7 @@ class CreateSteps < ActiveRecord::Migration[6.1]
       t.timestamps
       t.string :title
       t.string :description
+      t.integer :milestone_id
     end
   end
 end

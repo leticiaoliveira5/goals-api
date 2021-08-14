@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2021_08_09_023953) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "title"
     t.string "description"
+    t.integer "goal_id"
   end
 
   create_table "steps", force: :cascade do |t|
@@ -33,6 +34,7 @@ ActiveRecord::Schema.define(version: 2021_08_09_023953) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "title"
     t.string "description"
+    t.integer "milestone_id"
   end
 
 end
