@@ -1,4 +1,4 @@
-class Api::GoalsController < Api::ApiController
+class Api::V1::GoalsController < Api::V1::ApiController
   def index
     render json: { msg: 'Hello World' }, status: :ok
   end

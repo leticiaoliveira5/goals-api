@@ -1,4 +1,4 @@
-class Api::MilestonesController < Api::ApiController
+class Api::V1::MilestonesController < Api::V1::ApiController
   def index
     @goal = Goal.find(params[:goal_id])
     @milestones = @goal.milestones
