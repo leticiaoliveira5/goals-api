@@ -51,7 +51,7 @@ describe 'MilestonesController', type: :request do
         milestone = create(:milestone, title: 'Learn F')
         milestone_changes = { title: 'Learn French' }
         patch api_v1_milestone_path(milestone.id, milestone_changes.as_json)
-        p response.body
+
         expect(response).to have_http_status(200)
         expect(Milestone.last.title).to eq 'Learn French'
       end

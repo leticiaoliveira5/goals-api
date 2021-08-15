@@ -3,7 +3,7 @@ class Goal < ApplicationRecord
   has_many :milestones, dependent: :destroy
   has_many :steps, through: :milestones
 
-  validates :title, presence: true
+  validates :title, presence: true, length: { maximum: 50 }
   validate :deadline_validation
 
   enum status: { on_hold: 0, in_progress: 1, completed: 2 }
