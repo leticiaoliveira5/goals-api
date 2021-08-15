@@ -5,7 +5,7 @@ class Api::GoalsController < Api::ApiController
 
   def show
     @goal = Goal.find(params[:id])
-    render json: { goal: @goal.as_json,
+    render json: { goal: @goal,
                    milestones: @goal.milestones,
                    steps: @goal.steps }
   end
@@ -21,7 +21,7 @@ class Api::GoalsController < Api::ApiController
   def create
     @goal = Goal.new(goal_params)
     if @goal.save
-      render json: { goal: @goal.as_json }, status: :created
+      render json: @goal, status: :created
     else
       render json: { msg: 'Unauthorized', errors: @goal.errors.messages }, status: :unauthorized
     end
@@ -41,9 +41,9 @@ class Api::GoalsController < Api::ApiController
     @goal = Goal.find(params[:id])
     @goal.update(goal_params)
     if @goal.save
-      render json: { goal: @goal.as_json }, status: :ok
+      render json: @goal, status: :ok
     else
-      render json: { msg: 'Unauthorized', errors: @goal.errors.messages }, status: :unauthorized
+      render json: { errors: @goal.errors.messages }, status: :unprocessable_entity
     end
   end
 
