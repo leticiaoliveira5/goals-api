@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_023953) do
+ActiveRecord::Schema.define(version: 2021_08_29_152051) do
 
   create_table "goals", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(version: 2021_08_09_023953) do
     t.string "description"
     t.datetime "deadline"
     t.integer "status", default: 1
+  end
+
+  create_table "jwt_denylist", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
   create_table "milestones", force: :cascade do |t|
@@ -46,4 +52,5 @@ ActiveRecord::Schema.define(version: 2021_08_09_023953) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
 end
