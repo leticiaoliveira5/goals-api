@@ -5,7 +5,7 @@ RSpec.describe Step, type: :model do
     it { should validate_presence_of(:title) }
     it { should validate_length_of(:title) }
   end
-  
+
   context '#goal' do
     it 'returns goal' do
       goal = create(:goal)
