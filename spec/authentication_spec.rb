@@ -38,8 +38,8 @@ describe 'Authentication', type: :request do
         user_keys = { user: { email: user.email, password: user.password } }.as_json
         post user_session_path(user_keys)
 
-        token = {Authorization: response.header["Authorization"]}.as_json
-        
+        token = { Authorization: response.header['Authorization'] }.as_json
+
         get(member_data_path, headers: token)
 
         expect(response.body).to eq '{"message":"If you see this, you are in!"}'
