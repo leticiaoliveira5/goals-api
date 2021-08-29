@@ -6,7 +6,10 @@ Rails.application.routes.draw do
       }
   get '/member-data', to: 'members#show'
   namespace 'api' do
-    resources :tasks, only: [:index]
-    resources :goals
+    namespace 'v1' do
+      resources :goals, only: %i[index show create destroy update edit]
+      resources :milestones, only: %i[show create destroy update edit]
+      resources :steps, only: %i[show create destroy update edit]
+    end  
   end
 end
