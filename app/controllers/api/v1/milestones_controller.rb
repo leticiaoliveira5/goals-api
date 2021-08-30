@@ -1,4 +1,6 @@
 class Api::V1::MilestonesController < Api::V1::ApiController
+  before_action :authenticate_user!
+
   def index
     @goal = Goal.find(params[:goal_id])
     @milestones = @goal.milestones

@@ -1,4 +1,6 @@
 class Api::V1::GoalsController < Api::V1::ApiController
+  before_action :authenticate_user!
+
   def index
     render json: { msg: 'Hello World' }, status: :ok
   end
@@ -14,7 +16,8 @@ class Api::V1::GoalsController < Api::V1::ApiController
     @goal = Goal.new(
       title: [:title],
       description: [:description],
-      deadline: [:deadline]
+      deadline: [:deadline],
+      user_id: [:user_id]
     )
   end
 
@@ -50,6 +53,6 @@ class Api::V1::GoalsController < Api::V1::ApiController
   private
 
   def goal_params
-    params.permit(:title, :description, :deadline)
+    params.permit(:title, :description, :deadline, :user_id)
   end
 end

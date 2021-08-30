@@ -1,4 +1,6 @@
 class Api::V1::StepsController < Api::V1::ApiController
+  before_action :authenticate_user!
+
   def show
     @step = Step.find(params[:id])
     render json: @step, status: :ok
