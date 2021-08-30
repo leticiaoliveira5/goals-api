@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2021_08_29_152051) do
     t.string "description"
     t.datetime "deadline"
     t.integer "status", default: 1
+    t.integer "user_id"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -33,6 +34,7 @@ ActiveRecord::Schema.define(version: 2021_08_29_152051) do
     t.string "title"
     t.string "description"
     t.integer "goal_id"
+    t.integer "status", default: 0
   end
 
   create_table "steps", force: :cascade do |t|
@@ -41,6 +43,7 @@ ActiveRecord::Schema.define(version: 2021_08_29_152051) do
     t.string "title"
     t.string "description"
     t.integer "milestone_id"
+    t.integer "status", default: 0
   end
 
   create_table "users", force: :cascade do |t|

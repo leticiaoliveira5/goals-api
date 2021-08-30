@@ -1,5 +1,5 @@
 class Goal < ApplicationRecord
-  # belongs_to :user
+  belongs_to :user
   has_many :milestones, dependent: :destroy
   has_many :steps, through: :milestones
 

@@ -6,4 +6,6 @@ class User < ApplicationRecord
          :registerable,
          :validatable,
          jwt_revocation_strategy: JwtDenylist
+
+  has_many :goals, dependent: :destroy
 end
