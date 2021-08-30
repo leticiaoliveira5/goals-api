@@ -13,7 +13,7 @@ describe 'Authentication', type: :request do
         post user_registration_path(new_user_keys)
 
         expect(response.body).to eq '{"message":"Signed up sucessfully."}'
-        expect(response.status).to eq 200
+        expect(response).to have_http_status 200
       end
     end
 
@@ -31,7 +31,7 @@ describe 'Authentication', type: :request do
         post user_session_path(user_keys)
 
         expect { delete(user_registration_path, headers: token) }.to change(User, :count).by(-1)
-        expect(response.status).to eq 200
+        expect(response).to have_http_status 200
       end
     end
   end
@@ -50,7 +50,7 @@ describe 'Authentication', type: :request do
         get(member_data_path, headers: token)
 
         expect(response.body).to eq '{"message":"If you see this, you are in!"}'
-        expect(response.status).to eq 200
+        expect(response).to have_http_status 200
       end
     end
 
@@ -59,7 +59,7 @@ describe 'Authentication', type: :request do
         post user_session_path(user_keys)
 
         expect(response.body).to eq '{"message":"You are logged in."}'
-        expect(response.status).to eq 200
+        expect(response).to have_http_status 200
       end
 
       it 'should fail when user enters wrong password or email' do
@@ -67,7 +67,7 @@ describe 'Authentication', type: :request do
         post user_session_path(user_wrong_password)
 
         expect(response.body).to eq '{"error":"Invalid Email or password."}'
-        expect(response.status).to eq 401
+        expect(response).to have_http_status 401
       end
     end
 
@@ -78,7 +78,7 @@ describe 'Authentication', type: :request do
         delete(destroy_user_session_path, headers: token)
 
         expect(response.body).to eq '{"message":"You are logged out."}'
-        expect(response.status).to eq 200
+        expect(response).to have_http_status 200
       end
 
       it 'should fail without session token' do
@@ -87,7 +87,7 @@ describe 'Authentication', type: :request do
         delete(destroy_user_session_path, headers: {})
 
         expect(response.body).to eq '{"message":"Hmm nothing happened."}'
-        expect(response.status).to eq 401
+        expect(response).to have_http_status 401
       end
     end
   end
