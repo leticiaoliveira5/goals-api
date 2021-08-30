@@ -2,42 +2,50 @@ require 'rails_helper'
 
 describe 'Authentication', type: :request do
   let(:user) { create(:user) }
+  let(:user_keys) { { user: { email: user.email, password: user.password } }.as_json }
 
   context 'Registration' do
     context 'with fields' do
-      let(:expected_response) { '{"message":"Signed up sucessfully."}' }
       let(:new_user_keys) { { user: { email: 'test@example.com', password: '12345678' } }.as_json }
 
       it 'should sign up' do
         post user_registration_path(new_user_keys)
 
-        expect(response.body).to eq expected_response
+        expect(response.body).to eq '{"message":"Signed up sucessfully."}'
+        expect(response.status).to eq 200
       end
     end
 
     context 'without fields' do
-      let(:expected_response) { '{"message":"Something went wrong."}' }
       let(:empty_user_keys) { { user: { email: '', password: '' } }.as_json }
 
       it 'should throw error' do
-        post user_registration_path(empty_user_keys)
+        expect { post user_registration_path(empty_user_keys) }.not_to change(User, :count)
+        expect(response.body).to eq '{"message":"Something went wrong."}'
+      end
+    end
 
-        expect(response.body).to eq expected_response
+    context 'destroy registration' do
+      it 'should delete user' do
+        post user_session_path(user_keys)
+        token = { Authorization: response.header['Authorization'] }.as_json
+
+        expect { delete(user_registration_path, headers: token) }.to change(User, :count).by(-1)
+        expect(response.status).to eq 200
       end
     end
   end
 
   context 'Session' do
-    context 'trying to access an authenticated controller' do
+    context 'accessing an authenticated controller' do
       it 'should fail when not logged in' do
         get member_data_path
 
         expect(response.body).to eq 'You need to sign in or sign up before continuing.'
       end
-      it 'should be successful when logged in' do
-        user_keys = { user: { email: user.email, password: user.password } }.as_json
-        post user_session_path(user_keys)
 
+      it 'should be successful when logged in' do
+        post user_session_path(user_keys)
         token = { Authorization: response.header['Authorization'] }.as_json
 
         get(member_data_path, headers: token)
@@ -48,8 +56,6 @@ describe 'Authentication', type: :request do
     end
 
     context 'log in' do
-      let(:user_keys) { { user: { email: user.email, password: user.password } }.as_json }
-
       it 'should be successful when user has the right keys' do
         post user_session_path(user_keys)
 
@@ -62,6 +68,27 @@ describe 'Authentication', type: :request do
         post user_session_path(user_wrong_password)
 
         expect(response.body).to eq '{"error":"Invalid Email or password."}'
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'log out' do
+      it 'should be successful with session token' do
+        post user_session_path(user_keys)
+        token = { Authorization: response.header['Authorization'] }.as_json
+
+        delete(destroy_user_session_path, headers: token)
+
+        expect(response.body).to eq '{"message":"You are logged out."}'
+        expect(response.status).to eq 200
+      end
+
+      it 'should fail without session token' do
+        post user_session_path(user_keys)
+
+        delete(destroy_user_session_path, headers: {})
+
+        expect(response.body).to eq '{"message":"Hmm nothing happened."}'
         expect(response.status).to eq 401
       end
     end
