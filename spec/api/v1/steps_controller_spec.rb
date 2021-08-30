@@ -1,10 +1,17 @@
 require 'rails_helper'
 
 describe 'StepsController', type: :request do
+  let(:milestone) { create(:milestone) }
+  let(:user_keys) { { user: { email: milestone.goal.user.email, password: milestone.goal.user.password } }.as_json }
+  let(:token) { { Authorization: response.header['Authorization'] }.as_json }
+  before(:each) do
+    post user_session_path(user_keys)
+  end
+
   context 'show' do
-    it 'should return step and all its steps if present' do
-      step = create(:step, title: 'Have lunch')
-      get api_v1_step_path(step)
+    it 'should return step' do
+      step = create(:step, title: 'Have lunch', milestone_id: milestone.id)
+      get api_v1_step_path(step), headers: token
 
       expect(response.body).to include 'Have lunch'
     end
@@ -13,9 +20,8 @@ describe 'StepsController', type: :request do
   describe 'create' do
     context 'success' do
       it 'should return status created and step' do
-        milestone = create(:milestone)
         valid_step = { title: 'Test Title', milestone_id: milestone.id }
-        post api_v1_steps_path(valid_step.as_json)
+        post api_v1_steps_path(valid_step.as_json), headers: token
 
         expect(response).to have_http_status(201)
       end
@@ -23,9 +29,8 @@ describe 'StepsController', type: :request do
 
     context 'unauthorized' do
       it 'should return status unauthorized' do
-        milestone = create(:milestone)
         invalid_step = { title: '', milestone_id: milestone.id }
-        post api_v1_steps_path(invalid_step.as_json)
+        post api_v1_steps_path(invalid_step.as_json), headers: token
 
         expect(response).to have_http_status(401)
       end
@@ -34,8 +39,8 @@ describe 'StepsController', type: :request do
 
   describe 'delete' do
     it 'should return success message' do
-      step = create(:step)
-      delete api_v1_step_path(step.id.as_json)
+      step = create(:step, milestone_id: milestone.id)
+      delete api_v1_step_path(step.id.as_json), headers: token
 
       expect(response).to have_http_status(200)
       expect(response.body).to include 'Record deleted'
@@ -46,9 +51,9 @@ describe 'StepsController', type: :request do
   describe 'update' do
     context 'success' do
       it 'should return ok message and updated step' do
-        step = create(:step, title: 'Learn F')
+        step = create(:step, title: 'Learn F', milestone_id: milestone.id)
         step_changes = { title: 'Learn French' }
-        patch api_v1_step_path(step.id, step_changes.as_json)
+        patch api_v1_step_path(step.id, step_changes.as_json), headers: token
 
         expect(response).to have_http_status(200)
         expect(Step.last.title).to eq 'Learn French'
@@ -57,9 +62,9 @@ describe 'StepsController', type: :request do
 
     context 'should return status 422 if step not updated' do
       it 'should return status unprocessable' do
-        step = create(:step, title: 'Learn F')
+        step = create(:step, title: 'Learn F', milestone_id: milestone.id)
         step_changes = { title: '' }
-        patch api_v1_step_path(step.id, step_changes.as_json)
+        patch api_v1_step_path(step.id, step_changes.as_json), headers: token
 
         expect(response).to have_http_status(422)
         expect(Step.last.title).to eq 'Learn F'
