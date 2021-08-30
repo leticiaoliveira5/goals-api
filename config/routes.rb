@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :goals, only: %i[index show create destroy update edit]
       resources :milestones, only: %i[show create destroy update edit]
       resources :steps, only: %i[show create destroy update edit]
+      resources :users, only: %i[show]
     end
   end
 end
