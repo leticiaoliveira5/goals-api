@@ -3,6 +3,7 @@ require 'rails_helper'
 describe 'Authentication', type: :request do
   let(:user) { create(:user) }
   let(:user_keys) { { user: { email: user.email, password: user.password } }.as_json }
+  let(:token) { { Authorization: response.header['Authorization'] }.as_json }
 
   context 'Registration' do
     context 'with fields' do
@@ -28,7 +29,6 @@ describe 'Authentication', type: :request do
     context 'destroy registration' do
       it 'should delete user' do
         post user_session_path(user_keys)
-        token = { Authorization: response.header['Authorization'] }.as_json
 
         expect { delete(user_registration_path, headers: token) }.to change(User, :count).by(-1)
         expect(response.status).to eq 200
@@ -46,7 +46,6 @@ describe 'Authentication', type: :request do
 
       it 'should be successful when logged in' do
         post user_session_path(user_keys)
-        token = { Authorization: response.header['Authorization'] }.as_json
 
         get(member_data_path, headers: token)
 
@@ -75,7 +74,6 @@ describe 'Authentication', type: :request do
     context 'log out' do
       it 'should be successful with session token' do
         post user_session_path(user_keys)
-        token = { Authorization: response.header['Authorization'] }.as_json
 
         delete(destroy_user_session_path, headers: token)
 
