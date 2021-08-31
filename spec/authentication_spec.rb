@@ -7,7 +7,9 @@ describe 'Authentication', type: :request do
 
   context 'Registration' do
     context 'with fields' do
-      let(:new_user_keys) { { user: { email: 'test@example.com', password: '12345678' } }.as_json }
+      let(:new_user_keys) do
+        { user: { email: 'test@example.com', password: '12345678', username: 'test' } }.as_json
+      end
 
       it 'should sign up' do
         post user_registration_path(new_user_keys)
@@ -18,7 +20,7 @@ describe 'Authentication', type: :request do
     end
 
     context 'without fields' do
-      let(:empty_user_keys) { { user: { email: '', password: '' } }.as_json }
+      let(:empty_user_keys) { { user: { email: '', username: '', password: '' } }.as_json }
 
       it 'should throw error' do
         expect { post user_registration_path(empty_user_keys) }.not_to change(User, :count)
