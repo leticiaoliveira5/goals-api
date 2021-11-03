@@ -12,15 +12,6 @@ class Api::V1::GoalsController < Api::V1::ApiController
                    steps: @goal.steps }
   end
 
-  def new
-    @goal = Goal.new(
-      title: [:title],
-      description: [:description],
-      deadline: [:deadline],
-      user_id: [:user_id]
-    )
-  end
-
   def create
     @goal = Goal.new(goal_params)
     if @goal.save
@@ -34,10 +25,6 @@ class Api::V1::GoalsController < Api::V1::ApiController
     @goal = Goal.find(params[:id])
     @goal.destroy
     render json: { msg: 'Record deleted' }, status: :ok
-  end
-
-  def edit
-    @goal = Goal.find(params[:id])
   end
 
   def update
