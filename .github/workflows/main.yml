@@ -38,7 +38,7 @@ jobs:
           bundle install --jobs 4 --retry 3
       - name: Test with RSpec
         env:
-          DEVISE_SECRET_KEY: secret_key
+          DEVISE_SECRET_KEY: not_so_secret_key
           RAILS_ENV: test
         #   POSTGRES_USER: postgres
         #   POSTGRES_PASSWORD: password
@@ -60,6 +60,4 @@ jobs:
           rubocop_version: gemfile
           rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile
           reporter: github-pr-check
-
-          
-
+      
