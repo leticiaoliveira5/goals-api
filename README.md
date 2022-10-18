@@ -5,5 +5,5 @@
 
 Uma API Ruby on Rails :)
 
-- Ruby: 2.7.2
+- Ruby: 2.7.6
 - Rails: 6
