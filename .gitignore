@@ -32,3 +32,5 @@
 
 #Ignore Simplecov
 /coverage
+
+.env
