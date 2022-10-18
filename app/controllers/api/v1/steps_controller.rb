@@ -6,13 +6,6 @@ class Api::V1::StepsController < Api::V1::ApiController
     render json: @step, status: :ok
   end
 
-  def new
-    @step = Step.new(
-      title: [:title],
-      description: [:description]
-    )
-  end
-
   def create
     @step = Step.new(step_params)
     @step.milestone = Milestone.find(params[:milestone_id])
@@ -27,10 +20,6 @@ class Api::V1::StepsController < Api::V1::ApiController
     @step = Step.find(params[:id])
     @step.destroy
     render json: { msg: 'Record deleted' }, status: :ok
-  end
-
-  def edit
-    @step = Step.find(params[:id])
   end
 
   def update

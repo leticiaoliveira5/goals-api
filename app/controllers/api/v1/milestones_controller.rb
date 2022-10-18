@@ -1,23 +1,11 @@
 class Api::V1::MilestonesController < Api::V1::ApiController
   before_action :authenticate_user!
 
-  def index
-    @goal = Goal.find(params[:goal_id])
-    @milestones = @goal.milestones
-  end
-
   def show
     @milestone = Milestone.find(params[:id])
     render json: { milestone: @milestone,
                    steps: @milestone.steps,
                    goal: @milestone.goal }
-  end
-
-  def new
-    @milestone = Milestone.new(
-      title: [:title],
-      description: [:description]
-    )
   end
 
   def create
@@ -34,10 +22,6 @@ class Api::V1::MilestonesController < Api::V1::ApiController
     @milestone = Milestone.find(params[:id])
     @milestone.destroy
     render json: { msg: 'Record deleted' }, status: :ok
-  end
-
-  def edit
-    @milestone = Milestone.find(params[:id])
   end
 
   def update
