@@ -39,6 +39,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           DATABASE_URL: "postgres://postgres@localhost:5432/db_test"
+          DEVISE_SECRET_KEY: '012345678901234567890123456789'
         run: |
           bundle exec rake db:schema:load
           bundle exec rspec --format documentation --require rails_helper
