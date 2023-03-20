@@ -17,5 +17,5 @@ services:
         - "3000:3000"
     depends_on:
         - db
-    environment:
-      DEVISE_SECRET_KEY: '123'
+    env_file: .env.docker
+
