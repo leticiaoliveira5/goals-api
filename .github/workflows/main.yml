@@ -1,12 +1,15 @@
-name: CI
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+name: "Main Workflow"
 on:
   push:
     branches: [ master, production ]
   pull_request:
     branches: [ master, production ]
-permissions:
-  contents: read
-  pull-requests: write
 jobs:
   rspec:
     runs-on: ubuntu-latest
@@ -17,47 +20,44 @@ jobs:
           - 5432:5432
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: db_test
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      RAILS_ENV: test
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+      - name: Set up Ruby 3.1.3
+        uses: ruby/setup-ruby@v1.127.0
         with:
-          ruby-version: 2.7.6
-      - name: Setup cache key and directory for gems cache
-        uses: actions/cache@v1
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
-      - name: Bundle install
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-      - name: Test with RSpec
+          ruby-version: 3.1.3
+          bundler-cache: true
+      - name: Run tests
         env:
-          DEVISE_SECRET_KEY: not_so_secret_key
           RAILS_ENV: test
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
+          POSTGRES_PASSWORD: postgres
           DATABASE_URL: "postgres://postgres@localhost:5432/db_test"
         run: |
-         bundle exec rake db:schema:load
-         bundle exec rspec --require rails_helper
-
+          bundle exec rake db:schema:load
+          bundle exec rspec --format documentation --require rails_helper
   rubocop:
     name: rubocop
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v1
-      - uses: ruby/setup-ruby@v1
-      - name: rubocop
-        uses: reviewdog/action-rubocop@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Curl rubocop.yml
+        run: curl https://raw.githubusercontent.com/leticiaoliveira5/code-style/master/.rubocop.3.1.3.yml -o .rubocop.yml
+      - name: Set up Ruby 3.1.3
+        uses: ruby/setup-ruby@v1.127.0
+        with:
+          ruby-version: 3.1.3
+          bundler-cache: true
+      - name: run rubocop
+        uses: reviewdog/action-rubocop@v2.3.0
         with:
           rubocop_version: gemfile
           rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile
           reporter: github-pr-check
-      
