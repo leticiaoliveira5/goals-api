@@ -12,6 +12,8 @@ gem 'rack-cors'
 gem 'rails', '~> 6.1.4'
 
 group :development, :test do
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot'
   gem 'factory_bot_rails'
