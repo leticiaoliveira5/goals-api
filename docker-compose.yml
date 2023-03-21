@@ -4,7 +4,8 @@ services:
     image: postgres:14
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
-    env_file: .env
+    environment:
+      POSTGRES_PASSWORD: postgres
   web:
     build:
       context: .
@@ -17,4 +18,3 @@ services:
         - "3000:3000"
     depends_on:
         - db
-    env_file: .env
