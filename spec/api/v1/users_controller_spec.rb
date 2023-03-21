@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::UsersController, type: :request do
+RSpec.describe Api::V1::UsersController do
   let(:user) { create(:user) }
   let(:user_keys) { { user: { email: user.email, password: user.password } }.as_json }
   let(:token) { { Authorization: response.header['Authorization'] }.as_json }
