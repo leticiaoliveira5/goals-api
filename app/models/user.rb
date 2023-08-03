@@ -8,4 +8,9 @@ class User < ApplicationRecord
          jwt_revocation_strategy: JwtDenylist
 
   has_many :goals, dependent: :destroy
+
+  validates :username,
+            presence: true,
+            length: { maximum: 15, minimum: 3 },
+            uniqueness: true
 end
